@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO LIST</title>
+    <link rel="stylesheet" href="todostyle.css" />
+  </head>
+  <body>
+    <div class="todo-container">
+      <header>TODO</header>
+      <form>
+        <input type="text" id="todo-input" />
+        <button id="add-btn" class="add-btn">Add</button>
+      </form>
+
+      <div class="todos">
+        <div class="todo">
+          <i class="fa-solid fa-check check"></i>
+          <input
+            type="text"
+            class="todo-content"
+            value="BOŞ TODO..."
+            readonly
+          />
+          <div class="todo-icon">
+            <i class="fa-solid fa-trash delete"></i
+            ><i class="fa-solid fa-pencil edit"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="todoscript.js"></script>
+  </body>
+</html>

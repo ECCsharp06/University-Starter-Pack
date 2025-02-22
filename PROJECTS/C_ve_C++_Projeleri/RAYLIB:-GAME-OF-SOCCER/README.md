@@ -2,10 +2,10 @@
 
 Raylib C++ Starter Template for Visual Studio Code on Windows.
 
-This demo project contains a bouncing ball raylib example program.
+Bu "README" dosyası aslında YouTube'da "Programming with Nick" hesabına ait olup değiştirilmiştir.
 
-It works with raylib version 4.5.
-Tested on both Windows 10 and Windows 11.
+Bu YouTube kullanıcısının Raylib'in kurulumu konusunda bana büyük katkısı olmuştur. Eğer Raylib'i
+bir oyun geliştirme kütüphanesi olarak kullanmak isterseniz size de yardımı olabilir.
 
 # Video Tutorial
 
@@ -14,13 +14,13 @@ Tested on both Windows 10 and Windows 11.
 </p>
 
 <p align="center">
-🎥 <a href="https://www.youtube.com/watch?v=PaAcVk5jUd8">Video Tutorial on YouTube</a>
+🎥 <a href="https://www.youtube.com/watch?v=PaAcVk5jUd8">Video Tutorial on YouTube (Yukarıda Belirtilen YouTube Kullancısının Video Tutorial'ı) </a>
 </p>
 
 <br>
 <br>
 <p align="center">
-| 📺 <a href="https://www.youtube.com/channel/UC3ivOTE5EgpmF2DHLBmWIWg">My YouTube Channel</a>
-| 🌍 <a href="https://www.programmingwithnick.com">My Website</a> | <br>
+| 📺 <a href="https://www.youtube.com/channel/UC3ivOTE5EgpmF2DHLBmWIWg">My YouTube Channel  (Yukarıda Belirtilen YouTube Kullancısının Kanalı) </a>
+| 🌍 <a href="https://www.programmingwithnick.com">My Website (Kullanıcının Web Sitesi) </a> | <br>
 </p>
 

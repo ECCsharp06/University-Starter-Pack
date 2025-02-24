@@ -24,3 +24,12 @@ bir oyun geliştirme kütüphanesi olarak kullanmak isterseniz size de yardımı
 | 🌍 <a href="https://www.programmingwithnick.com">My Website (Kullanıcının Web Sitesi) </a> | <br>
 </p>
 
+## NOT
+Merhaba! Raylib oyun geliştirme kütüphanesini kullanmış biri olarak söylüyorum; Raylib'in kurulumunu 
+gerçekleştirmeniz kolay olmayabilir. Yukarıdaki YouTube videosundan bir başlangıç programı kurulumunu
+gerçekleştirmeniz daha kolay olacaktır. Eğer oyun programımı test etmek isterseniz kurduğunuz başlangıç
+workspace'inde basit olarak "main.cpp" dosyasının içerisindeki kodu silin ve bu repoda bulunan
+"GameOfSoccer.cpp" adlı dosyadaki bütün kodu kopyala yapıştır yapın.
+
+## DİPNOT 
+Yukarıda bahsetmiş olduğum yöntemin çalışma garantisini veremeyebilirim. Üzgünüm.

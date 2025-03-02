@@ -97,7 +97,7 @@ int main(){
     const int SCREEN_WIDTH = 1200; // Ekran genişliği ve yüksekliği
     const int SCREEN_HEIGHT = 800;
     const float GRAVITY = 0.5f; // Yerçekimi kuvveti
-    const float JUMP_FORCE = 15.0f; // Oyuncunun zıplama kuvveti
+    const float JUMP_FORCE = 15.5f; // Oyuncunun zıplama kuvveti
     const float FRICTION = 0.95f; // Sürtünme kuvveti
     float velocityY = 0; // Oyuncunun başlangıçta dikey hızı
     float ballVelocityY = 0; // Topun başlangıçta dikey hızı
@@ -113,6 +113,7 @@ int main(){
 
     Sound jumpSound = LoadSound("jump.wav"); // Zıplama sesi
     Sound goalSound = LoadSound("crowd-cheering-soccer.wav"); // Gol sesi
+    Sound kickSound = LoadSound("soccer-kick.wav"); // Topa vurulma sesi
 
     // Program içerisinde kullanılan dokular. Dokular oyun içerisinde belirli görüntüleri sağlar. Dokular bu kod bloğuyla başlangıçta bir kez yüklenir.
     Texture2D playerRight = LoadTexture("playertextureright.png");
@@ -188,6 +189,8 @@ int main(){
         Rectangle ballSourceRec = { 0.0f, 0.0f, (float)balltexture.width, (float)balltexture.height };
         Rectangle ballDestRec = { ball.x, ball.y, ball.width, ball.height };
         Vector2 ballOrigin = { 0.0f, 0.0f };
+        // Bu bariyer topun kalenin arkasında üst direği aşıp aşağıya düşmemesi için. 
+        Rectangle invisBarier = {1150, 350, 50, 10};
 
         // Kale direği ve file çizimleri için pozisyonlar
         Vector2 keepLineStartPos={1145,351};
@@ -223,6 +226,9 @@ int main(){
         DrawRectangleRounded(ball, 1, 0, transparentMaroon);
         DrawRectangleRounded(keepFence, 0.1, 0, GRAY);
         DrawRectangleRounded(keepFence2, 0.1, 0, GRAY);
+        // Görünmez bariyer çizimi
+        DrawRectangleRounded(invisBarier , 0.1, 0, BLACK);
+
         DrawLineEx(keepLineStartPos, keepLineEndPos, 10, GRAY);
         DrawLineEx(netLineStartPos, netLineEndPos, 5, BLACK);
         DrawLineEx(netLine2StartPos, netLine2EndPos, 5, BLACK);
@@ -249,6 +255,7 @@ int main(){
             else if(IsKeyDown(KEY_LEFT)){
                 ballVelocityX = -25; // Top sola doğru hareket eder
             }
+            PlaySound(kickSound);
         }
 
         // Topun yatay hareketini güncelle ve sürtünme kuvveti uygula
@@ -268,7 +275,7 @@ int main(){
             ballVelocityX *= -1;
         }
         // Topun üst kale direğine çarpmasının kontrolü ve kontrole göre topun yönünü değiştirme
-        if(checkCollision(keepFence2, ball)){
+        if(checkCollision(keepFence2, ball) || checkCollision(invisBarier, ball)){
             if(ball.x < keepFence2.x){
                 ball.x = keepFence2.x - ball.width;
             }
@@ -280,6 +287,19 @@ int main(){
             }
             else if(ball.y + ball.height > keepFence2.y + keepFence2.height){
                 ball.y = keepFence2.y + keepFence2.height;
+            }
+
+            if(ball.x < invisBarier.x){
+                ball.x=invisBarier.x-ball.width;
+            }
+            else if(ball.x + ball.width > invisBarier.x + invisBarier.width){
+                ball.x = invisBarier.x + invisBarier.width;
+            }
+            if(ball.y < invisBarier.y){
+                ball.y = invisBarier.y - ball.height;
+            }
+            else if(ball.y + ball.height > invisBarier.y + invisBarier.height){
+                ball.y = invisBarier.y + invisBarier.height;
             }
             ballVelocityX *= -1;
             ballVelocityY *= -1;
@@ -318,37 +338,39 @@ int main(){
         }
         // Gol atılmasının kontrolü
         static bool goalScored = false;
+
         // Top kaleye girdiyse skoru arttır ve gol sesi çal
-        if(ball.x + ball.width > keepFence.x+keepFence.width+39 && !goalScored){
+        if(ball.x + ball.width > keepFence.x + keepFence.width + 79 && ball.x < keepFence.x + keepFence.width + 79 + ball.width && ball.y + ball.height > keepFence2.y + keepFence2.height + 79 && !goalScored){
             score++;
             PlaySound(goalSound);
             goalScored = true;
         }
-        
+
         if(ball.x + ball.width <= keepFence.x){
             goalScored = false;
         }
         // Gol atıldığında topu başlangıç pozisyonuna geri döndür ( Burada niye resetBall kullanmadığımı hatırlamıyorum :) )
         if(goalScored){
-            ball.x=600;
-            ball.y=400;
-            ballVelocityX=0;
-            ballVelocityY=0;
+            ball.x = 600;
+            ball.y = 400;
+            ballVelocityX = 0;
+            ballVelocityY = 0;
         }
         // Sekiz bariyeri çiz ve her bariyerin görünme süresini kontrol et.
         eightBarrierDrawer(barriers, currentBarrier, timer, interval);
 
-        // Topun kale direğinin önünde kalma süresini kontrol et
-        if(ball.x <= keepFence.x && 825 <= ball.x){
+        // Topun kalenin içinde olmadığı zamanlarda sayacı başlat
+        if((825<=ball.x && ball.x <=keepFence.x) || (keepFence.x<ball.x&&ball.x<=1200)){
             ballTimer += GetFrameTime();
         } else {
             ballTimer = 0.0f;
         }
-        // Topun kale direğinin önünde belirli bir süre kalması durumunda topu başlangıç pozisyonuna geri döndür
+        // Topun istenilen yere belirli bir süre zarfı içerisinde girmemesi sonucu top resetlenir. Belirlemiş olduğumuz süre 4,5 saniyedir.
         if(ballTimer >= RESETING_LIMIT){
             resetBall(ball, ballVelocityX, ballVelocityY);
             ballTimer = 0.0f; // Timer'ı sıfırla
         }
+        
         // Çizim işlemlerini bitir
         EndDrawing();
     }
@@ -363,6 +385,7 @@ int main(){
     // Ses dosyalarını serbest bırak
     UnloadSound(jumpSound);
     UnloadSound(goalSound);
+    UnloadSound(kickSound);
     CloseAudioDevice(); // Ses sistemini kapat
     // Pencereyi kapat
     CloseWindow();
